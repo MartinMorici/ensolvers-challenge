@@ -1,10 +1,27 @@
 import { PencilSquareIcon, ArchiveBoxArrowDownIcon,TrashIcon  } from '@heroicons/react/24/outline'
+import { useContext } from 'react'
+import { NotesContext } from '../context/Context'
+
 const Notes = () => {
-    // FFC872 FF9B73 B692FF 01D3FF E4EE8F
+    const {notes} = useContext(NotesContext)
   return (
     <main className='pl-16 pt-12 w-full'>
         <h1 className='text-6xl font-semibold mb-16 '>My Notes</h1>
         <section className='flex flex-wrap gap-8 '>
+            {notes.map((note) => {
+                return ( <article key={note.id} className={`relative flex flex-col font-poppins font-medium rounded-2xl max-w-[300px] min-h-[250px] p-6 min-h w-full bg-[${note.color}]`}>
+                <h3 className='font-semibold'>{note.title}</h3>
+                <p className='font-normal text-[15px]'>{note.content}</p>
+                <div className=' relative mt-auto flex justify-between items-center gap-3 bottom-[-12px]'>
+                    <h3 className='text-sm text-gray-500'>{note.created}</h3>
+                    <div className='flex gap-2'>
+                        <PencilSquareIcon className='rounded-full w-8 h-8 p-[4px] bg-black text-white'/>
+                        <ArchiveBoxArrowDownIcon className='rounded-full w-8 h-8 p-[4px] bg-black text-white'/>
+                        <TrashIcon className='rounded-full w-8 h-8 p-[4px] bg-black text-red-300'/>
+                    </div>
+                </div>
+            </article>)
+            })}
             <article className='relative flex flex-col font-poppins font-medium rounded-2xl max-w-[300px] min-h-[250px] p-6 min-h w-full bg-[#FFC872]'>
                 <h3 className='font-semibold'>This is a Notter note.</h3>
                 <p className='font-normal text-[15px]'>This is an example of what you can do with Notter.</p>

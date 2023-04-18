@@ -1,25 +1,58 @@
-import { useRef, useState } from 'react'
+import { ChangeEvent, FormEvent, useContext, useRef, useState } from 'react'
 import AddCategories from './AddCategories'
+import { NotesContext } from '../context/Context'
 
 const AddNote = () => {
+    const {setNotes, notes, setShowAddNote} = useContext(NotesContext)
     const [categories, setCategories] = useState<string[]>([])
+    const [selectedColor, setSelectedColor] = useState<string>('#FFC872')
     const categorie = useRef<HTMLInputElement>(null)
+    const title = useRef<HTMLInputElement>(null)
+    const content = useRef<HTMLTextAreaElement>(null)
+
+    const handleSubmit = (e: FormEvent) => {
+        e.preventDefault()
+        if(title.current!.value && content.current!.value && categories){
+            const newNotes = [...notes, {id: new Date().valueOf(), title: title.current!.value, content:content.current!.value, categories: categories, color:selectedColor!, created: new Date().toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric" })}]
+            localStorage.setItem('notes', JSON.stringify(newNotes))
+            setNotes(newNotes)
+            setCategories([])
+            title.current!.value = '';
+            content.current!.value = ''
+            categorie.current!.value = ''
+            setShowAddNote(false)
+        }
+    }
+
+    const handleColor = (e:ChangeEvent<HTMLInputElement>) => {
+        setSelectedColor(e.target.value)
+    }
 
   return (
     <div className='absolute inset-0 flex justify-center items-center bg-[#0000008a]'>
-        <form className='max-w-[600px] w-full bg-white  rounded-3xl py-6 px-12 '>
-            <h3 className='text-6xl font-semibold text-[#9562fa]'>Create note</h3>
+        <form className='max-w-[600px] w-full bg-white  rounded-3xl py-6 px-12 ' onSubmit={(e) => handleSubmit(e)}>
+            <h3 className='text-6xl font-semibold text-[#fa6262]'>Create note</h3>
             <div className='grid grid-cols-[100px_1fr] mt-8'>
                 <label htmlFor="title">Title</label>
-                <input className='px-2 h-8 border border-black' type="text" id='title' />
+                <input ref={title} className='px-2 h-8 border border-black' type="text" id='title' />
             </div>
             <div className='grid grid-cols-[100px_1fr] mt-4'>
                 <label htmlFor="content">Content</label>
-                <textarea className='px-2 py-1 border border-black h-60' id='content' />
+                <textarea ref={content} className='px-2 py-1 border border-black h-60' id='content' />
             </div>
             <AddCategories categories={categories} setCategories={setCategories} categorie={categorie} ></AddCategories>
+            <div className='grid grid-cols-[100px_1fr] mt-4'>
+                <label htmlFor="color">Color</label>
+                <div className='flex gap-2'>
+                    <input className="cursor-pointer appearance-none h-[30px] w-[30px] checked:border-2 rounded-full border checked:border-[#000000] bg-[#FFC872]" value="#FFC872" type="radio" name="color" onChange={(e) => handleColor(e)} checked={selectedColor === '#FFC872' }/>
+                    <input className="cursor-pointer appearance-none h-[30px] w-[30px] checked:border-2 rounded-full border checked:border-[#000000] bg-[#FF9B73]" value="#FF9B73" type="radio" name="color" onChange={(e) => handleColor(e)} checked={selectedColor === '#FF9B73' }/>
+                    <input className="cursor-pointer appearance-none h-[30px] w-[30px] checked:border-2 rounded-full border checked:border-[#000000] bg-[#B692FF]" value="#B692FF" type="radio" name="color" onChange={(e) => handleColor(e)} checked={selectedColor === '#B692FF' }/>
+                    <input className="cursor-pointer appearance-none h-[30px] w-[30px] checked:border-2 rounded-full border checked:border-[#000000] bg-[#01D3FF]" value="#01D3FF" type="radio" name="color" onChange={(e) => handleColor(e)} checked={selectedColor === '#01D3FF' }/>
+                    <input className="cursor-pointer appearance-none h-[30px] w-[30px] checked:border-2 rounded-full border checked:border-[#000000] bg-[#E4EE8F]" value="#E4EE8F" type="radio" name="color" onChange={(e) => handleColor(e)} checked={selectedColor === '#E4EE8F' }/>
+                </div>
+            </div>
             <div className='flex mt-8 gap-4'>
-                <button className='ml-auto border border-black py-1 px-3 text-white bg-black rounded-sm'>Cancel</button>
+                <button className='ml-auto border border-black py-1 px-3 text-white bg-black rounded-sm' onClick={() => setShowAddNote(false)}>Cancel</button>
                 <button className='border border-black py-1 px-3 text-white bg-black rounded-sm' type='submit'>Save</button>
             </div>
         </form>

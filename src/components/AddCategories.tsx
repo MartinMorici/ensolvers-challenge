@@ -29,9 +29,9 @@ function AddCategories({categories,categorie, setCategories } : Props) {
             <div>
                 <div className=' p-2 h-24 border border-black w-full flex flex-wrap gap-y-1 overflow-auto'>
                     {categories.length <= 0 && <span className='text-gray-400'>You haven't added categories yet.</span>}
-                    {categories.map((cat) => {
+                    {categories.map((cat,index) => {
                         return (
-                            <div className='flex gap-1 h-7 mr-3 rounded-md items-center text-[15px] font-semibold border border-gray-500 p-2'>
+                            <div key={index} className='flex gap-1 h-7 mr-3 rounded-md items-center text-[15px] font-semibold border border-gray-500 p-2'>
                                 <TagIcon className='w-3 text-black' />
                                 {cat}
                                 <XMarkIcon onClick={() => { removeCategorie(cat) } } className=' cursor-pointer w-5 ml-1 text-red-600' />
