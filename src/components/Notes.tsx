@@ -8,11 +8,14 @@ const Notes = () => {
     const {notes,setNotes, setArchived, archived} = useContext(NotesContext)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [noteEdit, setNoteEdit] = useState<Note | undefined>()
+    const [warningRemove, setWarningRemove] = useState<boolean>(false)
+    const [idRemove, setIdRemove] = useState<number>(0)
 
     const removeNote = (id: number) => {
         const newNotes = notes.filter((note) => note.id !== id)
         localStorage.setItem('notes', JSON.stringify(newNotes));
         setNotes(newNotes);
+        setWarningRemove(false);
     }
 
     const addArchived = (note: Note) => {
@@ -51,30 +54,28 @@ const Notes = () => {
                                     <div className='overflow-hidden cursor-pointer rounded-full w-8 h-8 bg-black p-[4px] text-white' onClick={() => addArchived(note)}>
                                         <ArchiveBoxArrowDownIcon className={`archivebox-${note.id} relative`}/>
                                     </div>
-                                    <TrashIcon className='cursor-pointer rounded-full w-8 h-8 p-[4px] bg-black text-red-300' onClick={() => {removeNote(note.id)}} />
+                                    <TrashIcon className='cursor-pointer rounded-full w-8 h-8 p-[4px] bg-black text-red-300' 
+                                    onClick={() => {
+                                        setWarningRemove(true)
+                                        setIdRemove(note.id)}} 
+                                    />
                                 </div>
                             </div>
                         </article>
                     )
                 })}
-                {/* <article className='relative flex flex-col font-poppins font-medium rounded-2xl max-w-[300px] min-h-[250px] p-6 min-h w-full bg-[#FFC872]'>
-                    <h3 className='font-semibold'>This is a Notter note.</h3>
-                    <p className='font-normal text-[15px]'>This is an example of what you can do with Notter.</p>
-                    <div className=' relative mt-auto flex justify-between items-center gap-3 bottom-[-12px]'>
-                        <h3 className='text-sm text-gray-500'>April 14, 2023</h3>
-                        <div className='flex gap-2'>
-                            <PencilSquareIcon className='rounded-full w-8 h-8 p-[4px] bg-black text-white'/>
-                            <ArchiveBoxArrowDownIcon className='rounded-full w-8 h-8 p-[4px] bg-black text-white'/>
-                            <TrashIcon className='rounded-full w-8 h-8 p-[4px] bg-black text-red-300'/>
-                        </div>
-                    </div>
-                </article>
-                <article className='font-poppins font-medium rounded-2xl max-w-[300px] min-h-[250px] p-6 min-h w-full bg-[#FF9B73]'>
-                    This is a Notter note.
-                </article> */}
             </section>
         </main>
         {isEdit && <AddNote noteEdit={noteEdit} setIsEdit={setIsEdit}/>}
+        {warningRemove && <div className='absolute inset-0 flex justify-center items-center bg-[#0000008a]'>
+            <div className='p-10 rounded-xl bg-white flex flex-col'> 
+                <h4 className='text-2xl mb-10 flex flex-col justify-center items-center'><span className=" relative -top-5 text-red-500 text-5xl px-2">⚠</span> Are you sure You want to delete this note?</h4>
+                <div className='ml-auto'>
+                    <button className='border border-black py-1 px-3 text-white bg-black rounded-sm text-xl' onClick={() => removeNote(idRemove)}>Yes</button>
+                    <button className='border border-black py-1 px-3 text-white bg-black rounded-sm ml-4 text-xl' onClick={() => setWarningRemove(false)}>No</button>
+                </div>
+            </div>
+        </div>}
     </>
   )
 }

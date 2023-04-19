@@ -20,7 +20,7 @@ export default {
         }
       },
       animation:{
-        archived: 'archived 250ms ease-out'
+        archived: 'archived 250ms ease-in-out'
       },
       fontFamily:{
         'poppins': ['Poppins', 'sans-serif']
