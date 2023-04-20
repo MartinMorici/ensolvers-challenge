@@ -12,6 +12,8 @@ interface Context {
     setArchived: (notes:Note[]) => void;
     showAddNote: boolean;
     setShowAddNote: (show:boolean) => void;
+    isArchived: boolean;
+    setIsArchived: (show:boolean) => void;
 }
 
 export const NotesContext = React.createContext({} as Context);
@@ -22,6 +24,7 @@ const NotesProvider = ({ children }: Props) => {
     const notesLS = notesJson ? JSON.parse(notesJson) : [];
     const [notes, setNotesState] = useState<Note[]>(notesLS);
     const [archived, setArchivedState] = useState<Note[]>([]);
+    const [isArchived, setIsArchived] = useState<boolean>(false)
     const [showAddNote, setShowAddNoteState] = useState<boolean>(false)
 
     const setNotes = (notes:Note[])=> {
@@ -35,7 +38,7 @@ const NotesProvider = ({ children }: Props) => {
     } 
 
 
-  return <NotesContext.Provider value={{setNotes,notes, setShowAddNote, showAddNote, setArchived, archived}}>{children}</NotesContext.Provider>;
+  return <NotesContext.Provider value={{setNotes,notes, setShowAddNote, showAddNote, setArchived, archived, setIsArchived, isArchived}}>{children}</NotesContext.Provider>;
 };
 
 export default NotesProvider;

@@ -52,19 +52,19 @@ const AddNote = ({ noteEdit, setIsEdit }: Props) => {
     }
 
   return (
-    <div className='absolute inset-0 flex justify-center items-center bg-[#0000008a]'>
-        <form className='max-w-[600px] w-full bg-white  rounded-3xl py-6 px-12 ' onSubmit={(e) => handleSubmit(e)}>
-            <h3 className='text-6xl font-semibold'>{`${noteEdit ? 'Edit note' : 'Create note'}`}</h3>
-            <div className='grid grid-cols-[100px_1fr] mt-8'>
+    <div className='fixed sm:absolute inset-0 flex justify-center items-center bg-[#0000008a]'>
+        <form className='m-3 sm:m-0 max-w-[600px] w-full bg-white  rounded-3xl py-6 px-2 sm:px-12 ' onSubmit={(e) => handleSubmit(e)}>
+            <h3 className='text-3xl sm:text-6xl font-semibold'>{`${noteEdit ? 'Edit note' : 'Create note'}`}</h3>
+            <div className='flex flex-col sm:grid sm:grid-cols-[100px_1fr] mt-8'>
                 <label htmlFor="title">Title</label>
                 <input ref={title} className='px-2 h-8 border border-black' type="text" id='title' />
             </div>
-            <div className='grid grid-cols-[100px_1fr] mt-4'>
+            <div className='flex flex-col sm:grid sm:grid-cols-[100px_1fr] mt-4'>
                 <label htmlFor="content">Content</label>
-                <textarea ref={content} className='px-2 py-1 border border-black h-60' id='content' />
+                <textarea ref={content} className='px-2 py-1 border border-black sm:h-60 ' id='content' />
             </div>
             <AddCategories categories={categories} setCategories={setCategories} categorie={categorie} ></AddCategories>
-            <div className='grid grid-cols-[100px_1fr] mt-4'>
+            <div className='flex flex-col sm:grid sm:grid-cols-[100px_1fr] mt-4'>
                 <label htmlFor="color">Color</label>
                 <div className='flex gap-2'>
                     <input className="cursor-pointer appearance-none h-[30px] w-[30px] checked:border-2 rounded-full border checked:border-[#000000] bg-[#FFC872]" value="#FFC872" type="radio" name="color" onChange={(e) => handleColor(e)} checked={( selectedColor === '#FFC872')}/>

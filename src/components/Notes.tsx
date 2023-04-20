@@ -5,7 +5,7 @@ import { Note } from '../utils/note'
 import AddNote from './AddNote'
 
 const Notes = () => {
-    const {notes,setNotes, setArchived, archived} = useContext(NotesContext)
+    const {notes,setNotes, setArchived, archived, isArchived} = useContext(NotesContext)
     const [isEdit, setIsEdit] = useState<boolean>(false)
     const [noteEdit, setNoteEdit] = useState<Note | undefined>()
     const [warningRemove, setWarningRemove] = useState<boolean>(false)
@@ -13,8 +13,10 @@ const Notes = () => {
 
     const removeNote = (id: number) => {
         const newNotes = notes.filter((note) => note.id !== id)
+        const newArchived = archived.filter((note) => note.id !== id)
         localStorage.setItem('notes', JSON.stringify(newNotes));
         setNotes(newNotes);
+        setArchived(newArchived)
         setWarningRemove(false);
     }
 
@@ -39,10 +41,10 @@ const Notes = () => {
 
   return (
     <>
-        <main className='pl-16 pt-12 w-full'>
-            <h1 className='text-6xl font-semibold mb-16 '>My Notes</h1>
-            <section className='flex flex-wrap gap-8 '>
-                {notes.map((note) => {
+        <main className='flex flex-col items-center sm:block sm:pl-16 pt-12 w-full'>
+            <h1 className='text-6xl font-semibold mb-16 '>{isArchived ? 'Archived Notes' : 'My Notes'}</h1>
+            <section className='flex flex-wrap justify-center sm:justify-normal gap-8 '>
+                {(isArchived ? archived : notes).map((note) => {
                     return (
                         <article key={note.id} className={`relative flex flex-col font-poppins font-medium rounded-2xl max-w-[300px] min-h-[250px] p-6 min-h w-full bg-[${note.color}]`}>
                             <h3 className='font-semibold'>{note.title}</h3>

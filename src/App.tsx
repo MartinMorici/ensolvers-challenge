@@ -5,12 +5,11 @@ import Notes from './components/Notes';
 import Sidebar from './components/Sidebar';
 import { NotesContext } from './context/Context';
 
-
 function App() {
   const {notes, showAddNote} = useContext(NotesContext)
 
   return (
-    <div className='App font-poppins flex'>
+    <div className='App font-poppins flex flex-col sm:flex-row'>
       <Sidebar/>
       <Notes/>
       { showAddNote && <AddNote/>}

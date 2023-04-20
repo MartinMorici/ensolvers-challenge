@@ -24,7 +24,7 @@ function AddCategories({categories,categorie, setCategories } : Props) {
 
     
     return (
-        <div className='grid grid-cols-[100px_1fr] mt-4'>
+        <div className='flex flex-col sm:grid sm:grid-cols-[100px_1fr] mt-4'>
             <label htmlFor="categories">Categories</label>
             <div>
                 <div className=' p-2 h-24 border border-black w-full flex flex-wrap gap-y-1 overflow-auto'>
