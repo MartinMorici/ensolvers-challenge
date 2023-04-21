@@ -1,5 +1,5 @@
 import { PencilSquareIcon, ArchiveBoxArrowDownIcon,TrashIcon  } from '@heroicons/react/24/outline'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { NotesContext } from '../context/Context'
 import { Note } from '../utils/note'
 import AddNote from './AddNote'
@@ -10,6 +10,7 @@ const Notes = () => {
     const [noteEdit, setNoteEdit] = useState<Note | undefined>()
     const [warningRemove, setWarningRemove] = useState<boolean>(false)
     const [idRemove, setIdRemove] = useState<number>(0)
+    const [filterCategories, setFilterCategories] = useState<string[]>([])
 
     const removeNote = (id: number) => {
         const newNotes = notes.filter((note) => note.id !== id)
@@ -24,9 +25,11 @@ const Notes = () => {
         const isArchived = archived.find((arch) => arch.id === note.id)
         if (isArchived){
             const newArchived = archived.filter((arch) => arch.id !== note.id)
+            localStorage.setItem('archived', JSON.stringify(newArchived));
             setArchived(newArchived)
         } else{
             const newArchived = [...archived, note]
+            localStorage.setItem('archived', JSON.stringify(newArchived));
             setArchived(newArchived)
         }
         const icon = document.querySelector(`.archivebox-${note.id}`)
@@ -39,10 +42,42 @@ const Notes = () => {
         setNoteEdit(note);
     }
 
+    const filterNotes = (selected : string) => {
+        const notesJson = localStorage.getItem('notes');
+        const notesLS = notesJson ? JSON.parse(notesJson) : [];
+        const filteredNotes = notesLS.filter((note : Note) => note.categories.includes(selected))
+        setNotes(filteredNotes)
+        if (selected === "all"){
+            setNotes(notesLS)
+        }
+    }
+
+    useEffect(() => {
+        const categorias : string[] = [];
+  
+        notes.forEach(nota => {
+            nota.categories.forEach(categoria => {
+            if (!categorias.includes(categoria)) {
+                categorias.push(categoria);
+            }
+            });
+         });
+        
+        setFilterCategories(categorias)
+    }, [notes])
+    
+
   return (
     <>
         <main className='flex flex-col items-center sm:block sm:pl-16 pt-12 w-full'>
             <h1 className='text-6xl font-semibold mb-16 '>{isArchived ? 'Archived Notes' : 'My Notes'}</h1>
+            <div className='flex gap-4 items-center mb-3'>
+                <h2>Categories:</h2>
+                <select name="" id="" className='border border-black' onChange={(e) => filterNotes(e.target.value)}>
+                    <option value="all">All</option>
+                    {filterCategories?.map((cat) => <option value={cat}>{cat}</option> )}
+                </select>
+            </div>
             <section className='flex flex-wrap justify-center sm:justify-normal gap-8 '>
                 {(isArchived ? archived : notes).map((note) => {
                     return (

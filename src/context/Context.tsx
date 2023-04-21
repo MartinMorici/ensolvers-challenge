@@ -23,7 +23,9 @@ const NotesProvider = ({ children }: Props) => {
     const notesJson = localStorage.getItem('notes');
     const notesLS = notesJson ? JSON.parse(notesJson) : [];
     const [notes, setNotesState] = useState<Note[]>(notesLS);
-    const [archived, setArchivedState] = useState<Note[]>([]);
+    const archivedJson = localStorage.getItem('archived');
+    const archivedLS = archivedJson ? JSON.parse(archivedJson) : [];
+    const [archived, setArchivedState] = useState<Note[]>(archivedLS);
     const [isArchived, setIsArchived] = useState<boolean>(false)
     const [showAddNote, setShowAddNoteState] = useState<boolean>(false)
 

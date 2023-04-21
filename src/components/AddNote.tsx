@@ -9,7 +9,7 @@ interface Props {
 }
 
 const AddNote = ({ noteEdit, setIsEdit }: Props) => {
-    const {setNotes, notes, setShowAddNote} = useContext(NotesContext)
+    const {setNotes, notes, setShowAddNote, archived, setArchived} = useContext(NotesContext)
     const [categories, setCategories] = useState<string[]>([])
     const [selectedColor, setSelectedColor] = useState<string>('#FFC872')
     const categorie = useRef<HTMLInputElement>(null)
@@ -29,10 +29,16 @@ const AddNote = ({ noteEdit, setIsEdit }: Props) => {
         if(title.current!.value && content.current!.value && categories){
             if(noteEdit){
                 let newNotes = [...notes]
+                let archivedNotes = [...archived]
                 const index = notes.findIndex((note) => note.id === noteEdit.id)
+                const isArchived = archivedNotes.findIndex((note) => note.id === noteEdit.id)
                 newNotes[index] = {id: new Date().valueOf(), title: title.current!.value, content:content.current!.value, categories: categories, color:selectedColor!, created: new Date().toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                archivedNotes[isArchived] = {id: new Date().valueOf(), title: title.current!.value, content:content.current!.value, categories: categories, color:selectedColor!, created: new Date().toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric" })}
                 localStorage.setItem('notes', JSON.stringify(newNotes))
+                localStorage.setItem('archived', JSON.stringify(archivedNotes))
                 setNotes(newNotes)
+                setArchived(archivedNotes)
+          
                 setCategories([])
             } else {
                 const newNotes = [...notes, {id: new Date().valueOf(), title: title.current!.value, content:content.current!.value, categories: categories, color:selectedColor!, created: new Date().toLocaleString("en-US", { month: "long", day: "numeric", year: "numeric" })}]
